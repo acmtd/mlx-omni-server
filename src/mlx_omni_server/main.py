@@ -3,11 +3,20 @@ import os
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .middleware.logging import RequestResponseLoggingMiddleware
 from .routers import api_router
 
 app = FastAPI(title="MLX Omni Server")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Add request/response logging middleware with custom levels
 app.add_middleware(
@@ -16,7 +25,6 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
-
 
 def build_parser():
     """Create and configure the argument parser for the server."""
